@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import xarray as xr
 import datetime
-import missing_datetime_2005_05 as mdt
+from load_data import missing_datetime_2005_05 as mdt
 
 def load_cal_from_file(cal_dir):
     """Load all calibration data files (file.cal) from a directory.
@@ -19,13 +19,12 @@ def load_cal_from_file(cal_dir):
 def create_Dataset(cal_dir):
     """Create a xr.Dataset from the calibration data files in a directory.
     """
-    print(cal_dir)
     cal_list = load_cal_from_file(cal_dir)
     header, coordinates = create_coordinates(cal_dir)
     nc_list = []
     for i in range(len(cal_list)):
         cal_list[i].insert(loc=0, column='Datetime', value=np.full(len(cal_list[i]),datetime.datetime.strptime(coordinates[i][3], '%Y-%m-%d %H:%M:%S')))
-        nc_list.append(cal_list[i].set_index(['Pres','Datetime']).to_xarray())
+        nc_list.append(cal_list[i].set_index(['Pres','Datetime','LONGITUDE','LATITUDE']).to_xarray())
     ds = xr.concat(nc_list, dim='Datetime')
 
     Cast = np.zeros(len(coordinates))

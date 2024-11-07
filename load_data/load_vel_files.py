@@ -11,7 +11,8 @@ def load_vel_from_file(vel_dir):
     vel_files = [f for f in os.listdir(vel_dir) if f.endswith('.vel')]
     vel_list = []
     for vel_file in vel_files:
-        column_names = ['z_depth', 'u_water_velocity_component', 'v_water_velocity_component', 'error_velocity']
+        ### define the variable names 
+        column_names = ['DEPTH', 'u_water_velocity_component', 'v_water_velocity_component', 'error_velocity']
         vel_list.append(pd.read_csv(os.path.join(vel_dir, vel_file),names=column_names, skiprows=74, sep='\s+', encoding='utf-8'))
     return vel_list
 
@@ -32,7 +33,7 @@ def create_coordinates(vel_dir):
                 Cast = int(long_Cast_number[-4:-1])
             else:
                 Cast = int(long_Cast_number[-3:])
-            #Cast = int(file_content.splitlines()[21].decode('utf-8').split()[-1][-3:])
+
             Configuration = file_content.splitlines()[19].decode('utf-8').split()[-1]
             for i in [25,35,45]:
                 lat = file_content.splitlines()[i].decode('utf-8').split()[-1]
@@ -46,6 +47,7 @@ def create_coordinates(vel_dir):
                     start_values = [Cast,Configuration,date_time,lat,lon]
                 else:
                     end_values = [Cast,Configuration,date_time,lat,lon]
+
         avg_coordinates.append(avg_values)
         start_coordinates.append(start_values)
         end_coordinates.append(end_values)
@@ -54,28 +56,34 @@ def create_coordinates(vel_dir):
 def create_Dataset(vel_dir):
     """Create a xr.Dataset from the calibration data files in a directory.
     """
-    print(vel_dir)
-    
-    
     vel_list = load_vel_from_file(vel_dir)
     avg_coords, start_coords, end_coords = create_coordinates(vel_dir)
-    coordinates = avg_coords
-    nc_list = []
-    for i in range(len(vel_list)):
-        vel_list[i].insert(loc=0, column='Datetime', value=np.full(len(vel_list[i]),datetime.datetime.strptime(coordinates[i][2], '%Y-%m-%d %H:%M:%S')))
-        nc_list.append(vel_list[i].set_index(['z_depth','Datetime']).to_xarray())
-    ds = xr.concat(nc_list, dim='Datetime')
+    coordinates = start_coords
 
     Cast = np.zeros(len(coordinates))
     Lat = np.zeros(len(coordinates))
     Lon = np.zeros(len(coordinates))
+
     for i in range(len(coordinates)):   
         Cast[i] = coordinates[i][0]
         Lat[i] = coordinates[i][3]
         Lon[i] = coordinates[i][4]
-    ds = ds.assign_coords({ 'Cast': ('Datetime', Cast), 'Lat': ('Datetime', Lat), 'Lon': ('Datetime', Lon)})
+
+    
+    nc_list = []
+    for i in range(len(vel_list)):
+        vel_list[i].insert(loc=0, column='DATETIME', value=np.full(len(vel_list[i]),datetime.datetime.strptime(coordinates[i][2], '%Y-%m-%d %H:%M:%S')))
+        vel_list[i].insert(loc=0, column='LATITUDE', value=np.full(len(vel_list[i]),Lat[i]))
+        vel_list[i].insert(loc=0, column='LONGITUDE', value=np.full(len(vel_list[i]),Lon[i]))
+        nc_list.append(vel_list[i].set_index(['DATETIME','LONGITUDE','LATITUDE']).to_xarray())
+    ds = xr.concat(nc_list, dim='DATETIME')
+
+    ### assign coordinates to dataset and create a new dimension
+    #ds = ds.assign_coords({ 'Lat': ('Lat', Lat), 'Lon': ('Lat', Lon)})
+    #ds = ds.expand_dims(dim={"Lat": Lat, "Lon": Lon})
+    ds = ds.assign({'Cast': ('DATETIME', Cast)})
     ### sort the dataset by longitude
-    ds = ds.sortby('Lon')
+    #ds = ds.sortby('LONGITUDE')
     return ds
 
 def create_complete_Dataset(directory_list):
@@ -84,4 +92,4 @@ def create_complete_Dataset(directory_list):
     ds_list = []
     for vel_dir in directory_list:
         ds_list.append(create_Dataset(vel_dir))
-    return xr.concat(ds_list, dim='Datetime')
+    return xr.concat(ds_list, dim='DATETIME')
