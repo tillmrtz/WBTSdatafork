@@ -10,6 +10,8 @@ def load_vel_from_file(vel_dir):
     """
     vel_files = [f for f in os.listdir(vel_dir) if f.endswith('.vel')]
     vel_list = []
+    ### sort the files by the Cast number
+    vel_files = sorted(vel_files, key=lambda x: int(x[7:9]))
     for vel_file in vel_files:
         ### define the variable names 
         column_names = ['DEPTH', 'u_water_velocity_component', 'v_water_velocity_component', 'error_velocity']
@@ -51,6 +53,10 @@ def create_coordinates(vel_dir):
         avg_coordinates.append(avg_values)
         start_coordinates.append(start_values)
         end_coordinates.append(end_values)
+        ### sort the list by the Cast number
+        avg_coordinates = sorted(avg_coordinates, key=lambda x: x[0])
+        start_coordinates = sorted(start_coordinates, key=lambda x: x[0])
+        end_coordinates = sorted(end_coordinates, key=lambda x: x[0])
     return avg_coordinates, start_coordinates, end_coordinates
 
 def create_Dataset(vel_dir):
@@ -63,27 +69,20 @@ def create_Dataset(vel_dir):
     Cast = np.zeros(len(coordinates))
     Lat = np.zeros(len(coordinates))
     Lon = np.zeros(len(coordinates))
-
-    for i in range(len(coordinates)):   
-        Cast[i] = coordinates[i][0]
-        Lat[i] = coordinates[i][3]
-        Lon[i] = coordinates[i][4]
-
     
     nc_list = []
     for i in range(len(vel_list)):
         vel_list[i].insert(loc=0, column='DATETIME', value=np.full(len(vel_list[i]),datetime.datetime.strptime(coordinates[i][2], '%Y-%m-%d %H:%M:%S')))
-        vel_list[i].insert(loc=0, column='LATITUDE', value=np.full(len(vel_list[i]),Lat[i]))
-        vel_list[i].insert(loc=0, column='LONGITUDE', value=np.full(len(vel_list[i]),Lon[i]))
-        nc_list.append(vel_list[i].set_index(['DATETIME','LONGITUDE','LATITUDE']).to_xarray())
+        nc_list.append(vel_list[i].set_index(['DATETIME','DEPTH']).to_xarray())
+        Cast[i] = coordinates[i][0]
+        Lat[i] = coordinates[i][3]
+        Lon[i] = coordinates[i][4]
     ds = xr.concat(nc_list, dim='DATETIME')
-
-    ### assign coordinates to dataset and create a new dimension
-    #ds = ds.assign_coords({ 'Lat': ('Lat', Lat), 'Lon': ('Lat', Lon)})
-    #ds = ds.expand_dims(dim={"Lat": Lat, "Lon": Lon})
-    ds = ds.assign({'Cast': ('DATETIME', Cast)})
+    ds.coords['LATITUDE'] = ('DATETIME', Lat)
+    ds.coords['LONGITUDE'] = ('DATETIME', Lon)
+    ds = ds.assign({'CAST': ('DATETIME', Cast)})
     ### sort the dataset by longitude
-    #ds = ds.sortby('LONGITUDE')
+    ds = ds.sortby('LONGITUDE')
     return ds
 
 def create_complete_Dataset(directory_list):
