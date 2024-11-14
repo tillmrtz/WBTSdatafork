@@ -83,6 +83,11 @@ def create_Dataset(vel_dir):
     ds = ds.assign({'CAST': ('DATETIME', Cast)})
     ### sort the dataset by longitude
     ds = ds.sortby('LONGITUDE')
+
+    ### Add a string variable for each datetime which is the string 'GC_YYYY_MM' from the string cal_dir
+    gc_string = [s for s in vel_dir.split('/') if s.startswith('GC')][0]
+    gc_string = gc_string[:10]
+    ds['gc_string'] = ('DATETIME', [gc_string] * len(ds['DATETIME']))
     return ds
 
 def create_complete_Dataset(directory_list):

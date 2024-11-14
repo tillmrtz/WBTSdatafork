@@ -1,3 +1,10 @@
+# Don't upload all the data
+data/CTD/*
+data/ADCP/*
+data/Merged/*
+all_data_2001_2023.nc
+*eleanor*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
