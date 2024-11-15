@@ -4,6 +4,11 @@ import os
 import xarray as xr
 import datetime
 from load_data import missing_datetime_2005_05 as mdt
+from load_data.convert import process_dataset
+
+column_names = ["pr", "te", "th", "sa", "ht", "ga", "ox"]
+units = ["dbars", "deg c", "deg c", "psu", "dyn. cm", "gamma", "umol/kg"]
+
 
 def load_cal_from_file(cal_dir):
     """Load all calibration data files (file.cal) from a directory.
@@ -14,7 +19,6 @@ def load_cal_from_file(cal_dir):
     ### sort the files by the Cast number
     cal_files = sorted(cal_files, key=lambda x: int(x[6:8]))
     for cal_file in cal_files:
-        column_names = ['PRES', 'TEMPERATURE', 'Pot. Temp', 'PSAL', 'Dyn. Height', 'ga', 'Dis. Oxygen']
         cal_list.append(pd.read_csv(os.path.join(cal_dir, cal_file), names=column_names, skiprows=12, sep='\s+'))
     return cal_list
 
@@ -92,22 +96,30 @@ def create_Dataset(cal_dir):
     Lon = np.zeros(len(coordinates))
     for i in range(len(cal_list)):
         cal_list[i].insert(loc=0, column='DATETIME', value=np.full(len(cal_list[i]),datetime.datetime.strptime(coordinates[i][3], '%Y-%m-%d %H:%M:%S')))
-        nc_list.append(cal_list[i].set_index(['DATETIME','PRES']).to_xarray())
+        nc_list.append(cal_list[i].set_index(['DATETIME','pr']).to_xarray())
         Cast[i] = coordinates[i][0]
         Lat[i] = coordinates[i][1]
         Lon[i] = coordinates[i][2]
-    ds = xr.concat(nc_list, dim='DATETIME')
+    ds = xr.concat(nc_list, dim='DATETIME') 
+
     ### assign Longitude, Latitude as coordinates and the Cast number as a variable
-    ds.coords['LATITUDE'] = ('DATETIME', Lat)
-    ds.coords['LONGITUDE'] = ('DATETIME', Lon)
+    ds.coords['latitude'] = ('DATETIME', Lat)
+    ds.coords['longitude'] = ('DATETIME', Lon)
     ds = ds.assign({'CAST': ('DATETIME', Cast)})
-    ### sort the dataset by longitude
-    ds = ds.sortby('LONGITUDE')
+     ### add units
+    for i in range(len(column_names)):
+        ds[column_names[i]].attrs['units'] = units[i]
 
     ### Add a string variable for each datetime which is the string 'GC_YYYY_MM' from the string cal_dir
     gc_string = [s for s in cal_dir.split('/') if s.startswith('GC')][0]
     gc_string = gc_string[:10]
     ds['gc_string'] = ('DATETIME', [gc_string] * len(ds['DATETIME']))
+
+    ### add attributes and variable information
+    ds,_ = process_dataset(ds)
+    ### sort the dataset by longitude
+    ds = ds.sortby('LONGITUDE')
+
     return ds
 
 

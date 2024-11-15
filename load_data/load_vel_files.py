@@ -3,6 +3,10 @@ import pandas as pd
 import os
 import xarray as xr
 import datetime
+from load_data.convert import process_dataset
+
+column_names = ['z_depth', 'u_water_velocity_component', 'v_water_velocity_component', 'error_velocity']
+units = ['meters', 'cm_per_s', 'cm_per_s', 'cm_per_s']
 
 def load_vel_from_file(vel_dir):
     """Load all velocity data files (file.vel) from a directory.
@@ -13,8 +17,6 @@ def load_vel_from_file(vel_dir):
     ### sort the files by the Cast number
     vel_files = sorted(vel_files, key=lambda x: int(x[7:9]))
     for vel_file in vel_files:
-        ### define the variable names 
-        column_names = ['DEPTH', 'u_water_velocity_component', 'v_water_velocity_component', 'error_velocity']
         vel_list.append(pd.read_csv(os.path.join(vel_dir, vel_file),names=column_names, skiprows=74, sep='\s+', encoding='utf-8'))
     return vel_list
 
@@ -73,7 +75,7 @@ def create_Dataset(vel_dir):
     nc_list = []
     for i in range(len(vel_list)):
         vel_list[i].insert(loc=0, column='DATETIME', value=np.full(len(vel_list[i]),datetime.datetime.strptime(coordinates[i][2], '%Y-%m-%d %H:%M:%S')))
-        nc_list.append(vel_list[i].set_index(['DATETIME','DEPTH']).to_xarray())
+        nc_list.append(vel_list[i].set_index(['DATETIME','z_depth']).to_xarray())
         Cast[i] = coordinates[i][0]
         Lat[i] = coordinates[i][3]
         Lon[i] = coordinates[i][4]
@@ -81,13 +83,20 @@ def create_Dataset(vel_dir):
     ds.coords['LATITUDE'] = ('DATETIME', Lat)
     ds.coords['LONGITUDE'] = ('DATETIME', Lon)
     ds = ds.assign({'CAST': ('DATETIME', Cast)})
-    ### sort the dataset by longitude
-    ds = ds.sortby('LONGITUDE')
+    ### add units
+    for i in range(len(column_names)):
+        ds[column_names[i]].attrs['units'] = units[i]
 
     ### Add a string variable for each datetime which is the string 'GC_YYYY_MM' from the string cal_dir
     gc_string = [s for s in vel_dir.split('/') if s.startswith('GC')][0]
     gc_string = gc_string[:10]
     ds['gc_string'] = ('DATETIME', [gc_string] * len(ds['DATETIME']))
+        
+    ### add attributes and variable information
+    ds,_ = process_dataset(ds)
+    ### sort the dataset by longitude
+    ds = ds.sortby('LONGITUDE')
+
     return ds
 
 def create_complete_Dataset(directory_list):

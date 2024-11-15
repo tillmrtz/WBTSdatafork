@@ -1,108 +1,51 @@
-dims_rename_dict = {'sg_data_point': 'N_MEASUREMENTS'}
+dims_rename_dict = {}
 
 # Specify the preferred units, and it will convert if the conversion is available in unit_conversion
-preferred_units = ['m s-1', 'dbar', 'S m-1']
+preferred_units = ['m s-1', 'dbar', 'Celsius', 'psu', 'umol kg-1', 'gamma', 'm']
 
 # String formats for units.  The key is the original, the value is the desired format
 unit_str_format = {
-    'm/s': 'm s-1',
-    'cm/s': 'cm s-1',
-    'S/m': 'S m-1',
+    'cm_per_s': 'cm s-1',
     'meters': 'm',
-    'degrees_Celcius': 'Celcius'
+    'deg c': 'Celcius',
+    'psu': 'psu',
+    'dyn. cm': 'cm',
+    'gamma': 'gamma',
+    'umol/kg': 'umol kg-1',
+    'dbars': 'dbar',
 }
 
 # Various conversions from the key to units_name with the multiplicative conversion factor
 unit_conversion = {
     'cm/s': {'units_name': 'm/s', 'factor': 0.01},
     'cm s-1': {'units_name': 'm s-1', 'factor': 0.01},
-    'm/s': {'units_name': 'cm/s', 'factor': 100},
-    'm s-1': {'units_name': 'cm s-1', 'factor': 100},
-    'S/m': {'units_name': 'mS/cm', 'factor': 0.1},
-    'S m-1': {'units_name': 'mS cm-1', 'factor': 0.1},
-    'mS/cm': {'units_name': 'S/m', 'factor': 10},
-    'mS cm-1': {'units_name': 'S m-1', 'factor': 10},
-    'dbar': {'units_name': 'Pa', 'factor': 10000},
-    'Pa': {'units_name': 'dbar', 'factor': 0.0001},
-    'dbar': {'units_name': 'kPa', 'factor': 10},
+    'cm_per_s': {'units_name': 'm s-1', 'factor': 0.01},
+    'meters': {'units_name': 'm', 'factor': 1},
+    'cm': {'units_name': 'm', 'factor': 0.01},
+    'dyn. cm': {'units_name': 'cm', 'factor': 1},
 }
 
 # Based on https://github.com/voto-ocean-knowledge/votoutils/blob/main/votoutils/utilities/vocabularies.py
 standard_names = {
     "latitude": "LATITUDE",
     "longitude": "LONGITUDE",
-    "gps_lat": "LATITUDE_GPS",
-    "gps_lon": "LONGITUDE_GPS",
-    "gps_time": "TIME_GPS",
-    "ctd_time": "TIME",
-    "eng_pitchAng": "PITCH",
-    "eng_rollAng": "ROLL",
-    "eng_head": "HEADING",
-    "ctd_depth": "DEPTH",
-    "pressure": "PRES",
-    "conductivity": "CNDC",  #Conductivity corrected for anomalies
-#    "oxygen_concentration": "DOXY",
-#    "chlorophyll": "CHLA",
-    "temperature": "TEMP",
-    "salinity": "PSAL",
-#    "salinity_raw": "PSAL_RAW",
-#    "temperature_raw": "TEMP_RAW",
-#    "conductivity_raw": "CNDC_RAW",
+    "z_depth": "DEPTH",
+    "pr": "PRES",
+    "ox": "DOXY",
+    "te": "TEMP",
+    "sa": "PSAL",
     "ctd_density": "POTDENS0", # Seawater potential density - need to check standard name for sigma
-    "profile_index": "PROFILE_NUMBER",
-    "vert_speed": "GLIDER_VERT_VELO_MODEL",
-    "horz_speed": "GLIDER_HORZ_VELO_MODEL",
-    "speed": "GLIDE_SPEED",
-    "glide_angle": "GLIDE_ANGLE"
-#    "adcp_Pressure": "PRES_ADCP",
-#    "particulate_backscatter": "BBP700",
-#    "backscatter_scaled": "BBP700",
-#    "backscatter_raw": "RBBP700",
-#    "potential_temperature": "THETA",
-#    "down_irradiance_380": "ED380",
-#    "down_irradiance_490": "ED490",
-#    "downwelling_PAR": "DPAR",
-#    "temperature_oxygen": "TEMP_OXYGEN",
-#    "potential_density": "POTDENS0",
-#    "chlorophyll_raw": "FLUOCHLA",
-#    "ad2cp_pitch": "AD2CP_PITCH",
-#    "ad2cp_roll": "AD2CP_ROLL",
-#    "ad2cp_heading": "AD2CP_HEADING",
-#    "ad2cp_time": "AD2CP_TIME",
-#    "ad2cp_pressure": "AD2CP_PRES",
-#    "turbidity": "TURB",
-#    "cdom": "CDOM",
-#    "cdom_raw": "FLUOCDOM",
-#    "phycoerythrin": "PHYC",
-#    "phycoerythrin_raw": "FLUOPHYC",
-#    "tke_dissipation_shear_1": "EPSIFY01",
-#    "tke_dissipation_shear_2": "EPSIFY02",
+    "CAST": "CAST_NUMBER",
+    "th": "THETA",
+    "u_water_velocity_component": "U_WATER_VELOCITY",
+    "v_water_velocity_component": "V_WATER_VELOCITY",
+    "error_velocity": "ERROR_VELOCITY",
+    "ga": "GAMMA",
+    "ht": "DYN_HEIGHT",
+    "gc_string": "GC_STRING",
 }
 
-vars_to_remove = [
-    'dissolved_oxygen_sat',
-    'depth', 
-    'eng_depth',
-    'eng_elaps_t',
-    'eng_elaps_t_0000',
-    'latitude_gsm',
-    'longitude_gsm',
-    'sigma_t',
-    'sigma_theta',
-    'sound_velocity',
-    'theta',
-    'time',
-    'eng_sbect_condFreq',
-    'eng_sbect_tempFreq',
-    'glide_angle_gsm',
-    'horz_speed_gsm',
-    'north_displacement_gsm',
-    'east_displacement_gsm',
-    'speed_gsm',
-    'vert_speed_gsm',
-    'dive_num_cast',
-    'density'
-]
+vars_to_remove = []
 
 vocab_attrs = {
     "LATITUDE": {
@@ -133,7 +76,7 @@ vocab_attrs = {
     },
     "DATETIME": {
         "long_name": "time of measurement",
-#        "units": "seconds since 1970-01-01T00:00:00Z",
+        "units": "UTC time",
         "observation_type": "measured",
         "standard_name": "time",
         "URI": "https://vocab.nerc.ac.uk/collection/P02/current/AYMD/",
@@ -155,25 +98,11 @@ vocab_attrs = {
         "reference_datum": "surface",
         "positive": "down",
     },
-    "DEPTH_Z": {
-        "source": "pressure",
-        "long_name": "glider depth",
-        "standard_name": "depth",
-        "units": "m",
-        "comment": "Defined with positive up",
-        "sensor": "sensor_ctd",
-        "observation_type": "calculated",
-        "platform": "platform",
-        "valid_min": -4000,
-        "valid_max": 0,
-        "reference_datum": "surface",
-        "positive": "up",
-    },
     "DOXY": {
         "long_name": "oxygen concentration",
         "observation_type": "calculated",
         "standard_name": "mole_concentration_of_dissolved_molecular_oxygen_in_sea_water",
-        "units": "mmol m-3",
+        "units": "umol kg-1",
         "valid_max": 425,
         "valid_min": 0,
         "URI": "https://vocab.nerc.ac.uk/collection/P02/current/DOXY/",
@@ -223,10 +152,51 @@ vocab_attrs = {
         "valid_min": -5,
         "URI": "https://vocab.nerc.ac.uk/collection/OG1/current/THETA/",
     },
-    "PROFILE_NUMBER": {
-        "long_name": "profile index",
+    "CAST_NUMBER": {
+        "long_name": "Cast index",
         "units": "1",
     },
+    "U_WATER_VELOCITY": {
+        "long_name": "Eastward water velocity",
+        "observation_type": "measured",
+        "standard_name": "eastward_sea_water_velocity",
+        "units": "m s-1",
+        "valid_max": 3,
+        "valid_min": -3,
+        "URI": "",
+    },
+    "V_WATER_VELOCITY": {
+        "long_name": "Northward water velocity",
+        "observation_type": "measured",
+        "standard_name": "northward_sea_water_velocity",
+        "units": "m s-1",
+        "valid_max": 3,
+        "valid_min": -3,
+        "URI": "",
+    },
+    "ERROR_VELOCITY": {
+        "long_name": "Error in water velocity",
+        "observation_type": "measured",
+        "standard_name": "error_sea_water_velocity",
+        "units": "m s-1",
+        "valid_max": 2,
+        "valid_min": 0,
+        "URI": "",
+    },
+    "DYN_HEIGHT": {
+        "long_name": "Dynamic height",
+        "observation_type": "calculated",
+        "standard_name": "sea_surface_height_above_geoid",
+        "units": "m",
+        "valid_max": 2,
+        "valid_min": -2,
+        "URI": "",
+    },
+    "GC_STRING": {
+        "long_name": "GC string",
+        "units": "1",
+    },
+
 }
 
 # Various sensor vocabularies for OG1: http://vocab.nerc.ac.uk/scheme/OG_SENSORS/current/
