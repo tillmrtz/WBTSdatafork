@@ -6,6 +6,9 @@ import datetime
 from load_data import load_vel_files, load_cal_files
 from load_data.convert import process_dataset
 
+### import basepath from load_data.ipynb
+basepath = os.path.dirname(os.path.abspath(__file__))
+
 def create_coordinates_with_ADCPtimes(cal_dir, dir_list_ADCP):
     '''create the coordinates for the calibration data with the time from the ADCP data.'''
     year = cal_dir[-11:-4]
@@ -34,16 +37,19 @@ def create_CTD_Dataset_with_ADCPtimes(cal_dir,dir_list_ADCP):
     Cast = np.zeros(len(coordinates))
     Lat = np.zeros(len(coordinates))
     Lon = np.zeros(len(coordinates))
+    time_flag = np.zeros(len(coordinates))
     for i in range(len(cal_list)):
         cal_list[i].insert(loc=0, column='DATETIME', value=np.full(len(cal_list[i]),datetime.datetime.strptime(coordinates[i][3], '%Y-%m-%d %H:%M:%S')))
         nc_list.append(cal_list[i].set_index(['DATETIME','pr']).to_xarray())
         Cast[i] = coordinates[i][0]
         Lat[i] = coordinates[i][1]
         Lon[i] = coordinates[i][2]
+        time_flag[i] = coordinates[i][4]
     ds = xr.concat(nc_list, dim='DATETIME')
     ### assign Longitude, Latitude as coordinates and the Cast number as a variable
     ds.coords['LATITUDE'] = ('DATETIME', Lat)
     ds.coords['LONGITUDE'] = ('DATETIME', Lon)
+    ds = ds.assign({'TIME_FLAG': ('DATETIME', time_flag)})
     ds = ds.assign({'CAST': ('DATETIME', Cast)})
     ### add attributes and variable information
     ds,_ = process_dataset(ds)

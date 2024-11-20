@@ -52,8 +52,10 @@ def create_coordinates(cal_dir):
                 sl.pop(5)
 
             ### change the format of the gmt data
+            time_flag = 0
             year = i[2:6]
             if 505 == int(year):
+                time_flag = 2
                 dates = mdt.dates()
                 times = mdt.times()
                 sl[2] = sl[2].replace('-735234','')
@@ -64,6 +66,8 @@ def create_coordinates(cal_dir):
                 if len(sl[5]) == 3:
                     if int(sl[5][-2:]) > 59:
                         sl[5] = sl[5][:2] + '0' + sl[5][2]
+                    elif 0 < int(sl[5][-3]) < 3:
+                        time_flag = 1
                 elif len(sl[5]) == 2:
                     if int(sl[5][-2:]) > 59:
                         sl[5] = sl[5][0] + '0' + sl[5][1] 
@@ -72,13 +76,14 @@ def create_coordinates(cal_dir):
                     sl[5] = '0'+sl[5]
 
             ### create a datetime object from the date and time
-            #print(sl[4]+sl[5])
             Datetime = datetime.datetime.strptime(sl[4]+sl[5], '%m/%d/%y%H%M').strftime('%Y-%m-%d %H:%M:%S')
             sl[4] = Datetime
             sl[0] = int(sl[0])
             ### pop the unnecessary elements
             sl.pop(5)
             sl.pop(3)
+            ### append the time flag
+            sl.append(time_flag)
             coordinates.append(sl)
             ### sort coordinates by the Cast number
             coordinates = sorted(coordinates, key=lambda x: x[0])
@@ -94,17 +99,20 @@ def create_Dataset(cal_dir):
     Cast = np.zeros(len(coordinates))
     Lat = np.zeros(len(coordinates))
     Lon = np.zeros(len(coordinates))
+    time_flag = np.zeros(len(coordinates))
     for i in range(len(cal_list)):
         cal_list[i].insert(loc=0, column='DATETIME', value=np.full(len(cal_list[i]),datetime.datetime.strptime(coordinates[i][3], '%Y-%m-%d %H:%M:%S')))
         nc_list.append(cal_list[i].set_index(['DATETIME','pr']).to_xarray())
         Cast[i] = coordinates[i][0]
         Lat[i] = coordinates[i][1]
         Lon[i] = coordinates[i][2]
+        time_flag[i] = coordinates[i][4]
     ds = xr.concat(nc_list, dim='DATETIME') 
 
     ### assign Longitude, Latitude as coordinates and the Cast number as a variable
     ds.coords['latitude'] = ('DATETIME', Lat)
     ds.coords['longitude'] = ('DATETIME', Lon)
+    ds = ds.assign({'TIME_FLAG': ('DATETIME', time_flag)})
     ds = ds.assign({'CAST': ('DATETIME', Cast)})
      ### add units
     for i in range(len(column_names)):
