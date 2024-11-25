@@ -10,3 +10,5 @@ tqdm
 gsw
 cartopy
 importlib
+yaml
+pathlib

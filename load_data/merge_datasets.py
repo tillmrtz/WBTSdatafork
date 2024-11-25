@@ -6,10 +6,18 @@ import datetime
 from load_data import load_vel_files, load_cal_files
 from load_data.convert import process_dataset
 import yaml
+import pathlib
 
+# Set the directory for yaml files as the root directory + 'load_data/' --> Could be in 'config/' instead
+script_dir = pathlib.Path(__file__).parent.absolute()
+parent_dir = script_dir.parents[0]
+rootdir = parent_dir
+print(rootdir)
+config_dir = os.path.join(rootdir, 'load_data')
 
 ### import basepath from mission_config.yaml
-with open('load_data/config.yaml', 'r') as file:
+configpath = os.path.join(config_dir, 'config.yaml')
+with open(configpath, 'r') as file:
         config = yaml.safe_load(file)
 basepath = config['basepath']
 
