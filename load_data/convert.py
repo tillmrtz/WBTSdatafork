@@ -5,34 +5,28 @@ from load_data import attr_input
 import gsw
 import logging
 from datetime import datetime
+import yaml
+import time
 
 _log = logging.getLogger(__name__)
 
-
 def rename_dimensions(ds, rename_dict=vocabularies.dims_rename_dict):
     """
-    Rename dimensions of an xarray Dataset based on a provided dictionary vocabulary.
+    Renames dimensions in the dataset based on the provided dictionary for OG1.
 
     Parameters
     ----------
-    ds (xarray.Dataset): The dataset whose dimensions are to be renamed.
-    rename_dict (dict, optional): A dictionary where keys are the current dimension names 
-                                  and values are the new dimension names. Defaults to 
-                                  vocabularies.dims_rename_dict.
+    ds (xarray.Dataset): The input dataset containing dimensions to be renamed.
+    rename_dict (dict): A dictionary where keys are the old dimension names and values are the new dimension names.
 
     Returns
     -------
-    xarray.Dataset: A new dataset with renamed dimensions.
-    
-    Raises:
-    Warning: If no variables with dimensions matching any key in rename_dict are found.
+    xarray.Dataset: The dataset with renamed dimensions.
     """
-    # Check if there are any variables with dimensions matching 'sg_data_point'
-    matching_vars = [var for var in ds.variables if any(dim in ds[var].dims for dim in rename_dict.keys())]
-    if not matching_vars:
-        _log.warning("No variables with dimensions matching any key in rename_dict found.")
-    dims_to_rename = {dim: rename_dict[dim] for dim in ds.dims if dim in rename_dict}
-    return ds.rename_dims(dims_to_rename)
+    for old_name, new_name in rename_dict.items():
+        if old_name in ds.dims:
+            ds = ds.rename({old_name: new_name})
+    return ds
 
 def rename_variables(ds, rename_dict=vocabularies.standard_names):
     """
@@ -126,6 +120,48 @@ def convert_units(ds, preferred_units=vocabularies.preferred_units, unit_convers
 
     return ds
 
+def attr_cruise(ds):
+    # Open and load the YAML file
+    with open('load_data/config.yaml', 'r') as file:
+        config = yaml.safe_load(file)
+    GC_string = ds.GC_STRING.values[0]
+    project_id = config[GC_string]['Cruise']['cruise_id']
+    platform = config[GC_string]['Cruise']['ship']
+    time_cruise_start = config[GC_string]['Cruise']['start_date']
+    time_cruise_end = config[GC_string]['Cruise']['end_date']
+    sections = config[GC_string]['Cruise']['sections']
+    contributor_CTD = config[GC_string]['CTD_Contributor']['name']
+    contributor_ADCP = config[GC_string]['ADCP_Contributor']['name']
+    geospatial_lat_min = ds.LATITUDE.values.min()
+    geospatial_lat_max = ds.LATITUDE.values.max()
+    geospatial_lon_min = ds.LONGITUDE.values.min()
+    geospatial_lon_max = ds.LONGITUDE.values.max()
+    if 'PRES' in ds.variables:
+        geospatial_vertical_min = ds.PRES.values.min()
+        geospatial_vertical_max = ds.PRES.values.max()
+    else:
+        geospatial_vertical_min = ds.DEPTH.values.min()
+        geospatial_vertical_max = ds.DEPTH.values.max()
+    date_created = time.strftime("%Y-%m-%d")
+
+    ### create a directory with all specific attributes for the cruise
+    attr_cruise = {'project_id': project_id,
+               'platform': platform,
+               'time_cruise_start': time_cruise_start,
+               'time_cruise_end': time_cruise_end,
+               'sections': sections,
+               'contributor_CTD': contributor_CTD,
+               'contributor_ADCP': contributor_ADCP,
+               'geospatial_lat_min': geospatial_lat_min,
+               'geospatial_lat_max': geospatial_lat_max,
+               'geospatial_lon_min': geospatial_lon_min,
+               'geospatial_lon_max': geospatial_lon_max,
+               'geospatial_vertical_min': geospatial_vertical_min,
+               'geospatial_vertical_max': geospatial_vertical_max,
+               'date_created': date_created,
+               } 
+    return attr_cruise 
+
 def add_attributes(ds):
     """
     Add attributes to the variables in a dataset.
@@ -139,13 +175,20 @@ def add_attributes(ds):
     -------
     xarray.Dataset: The dataset with added attributes.
     """
-    if 'TEMP' in ds.variables:
-        attributes = attr_input.attr_CTD
-    elif 'U_WATER_VELOCITY' and 'TEMP' in ds.variables:
-        attributes = attr_input.attr_merge
-    else:
-        attributes = attr_input.attr_ADCP
+    attributes = attr_input.attr_general
+    ### add the cruise specific attributes
+    attributes.update(attr_cruise(ds))
 
+    if 'TEMP' in ds.variables:
+        attributes.update(attr_input.attr_CTD)
+    elif 'U_WATER_VELOCITY' and 'TEMP' in ds.variables:
+        attributes.update(attr_input.attr_merge)
+    else:
+        attributes.update(attr_input.attr_ADCP)
+
+    ### put the atributes in the right order
+    attributes = {key: attributes[key] for key in attr_input.order_of_attr}
+    ### add the attributes to the dataset
     for key, value in attributes.items():
         ds.attrs[key] = value
     return ds

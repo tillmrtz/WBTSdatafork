@@ -5,14 +5,45 @@ import xarray as xr
 import datetime
 from load_data import load_vel_files, load_cal_files
 from load_data.convert import process_dataset
+import yaml
 
-### import basepath from load_data.ipynb
-basepath = os.path.dirname(os.path.abspath(__file__))
 
-def create_coordinates_with_ADCPtimes(cal_dir, dir_list_ADCP):
+### import basepath from mission_config.yaml
+with open('load_data/config.yaml', 'r') as file:
+        config = yaml.safe_load(file)
+basepath = config['basepath']
+
+def dir_list_CTD(basepath):
+    '''create a list with all the directories that contain the CTD data'''
+    dir_list_CTD = []
+    for root, dirs,files in os.walk(basepath):
+        if 'CTD' in dirs: 
+            dir_list_CTD.append(os.path.join(root, 'CTD'))
+    dir_list_CTD.sort()
+    for i in dir_list_CTD:
+        if 'Created_files' in i:
+            dir_list_CTD.remove(i)
+    return dir_list_CTD
+def dir_list_ADCP(basepath):
+    ### create a list with all the directories that contain the LADCP data
+    dir_list_ADCP = []
+    for root, dirs,files in os.walk(basepath):
+        if 'FINAL_ADCP_PRODUCTS' and 'ladcp_velfiles' in dirs: 
+            dir_list_ADCP.append(os.path.join(root, 'ladcp_velfiles'))
+        if 'FINAL_ADCP_PRODUCTS' and 'LADCP_velfiles' in dirs:
+            dir_list_ADCP.append(os.path.join(root, 'LADCP_velfiles'))
+    dir_list_ADCP.sort()
+    ### exclude the 2019_12 path since it is empty
+    for i in dir_list_ADCP:
+        if '2019_12' in i:
+            dir_list_ADCP.remove(i)
+    return dir_list_ADCP
+
+
+def create_coordinates_with_ADCPtimes(cal_dir):
     '''create the coordinates for the calibration data with the time from the ADCP data.'''
     year = cal_dir[-11:-4]
-    for j in dir_list_ADCP:
+    for j in dir_list_ADCP(basepath):
         if year in j:
             _,coords_ADCP,_ = load_vel_files.create_coordinates(j)
             coords_CTD = load_cal_files.create_coordinates(cal_dir)
@@ -27,11 +58,11 @@ def create_coordinates_with_ADCPtimes(cal_dir, dir_list_ADCP):
             coordinates = coords_CTD
     return coordinates
 
-def create_CTD_Dataset_with_ADCPtimes(cal_dir,dir_list_ADCP):
+def create_CTD_Dataset_with_ADCPtimes(cal_dir):
     """Create a xr.Dataset from the calibration data files in a directory.
     """
     cal_list = load_cal_files.load_cal_from_file(cal_dir)
-    coordinates = create_coordinates_with_ADCPtimes(cal_dir, dir_list_ADCP)
+    coordinates = create_coordinates_with_ADCPtimes(cal_dir)
 
     nc_list = []
     Cast = np.zeros(len(coordinates))
@@ -47,20 +78,27 @@ def create_CTD_Dataset_with_ADCPtimes(cal_dir,dir_list_ADCP):
         time_flag[i] = coordinates[i][4]
     ds = xr.concat(nc_list, dim='DATETIME')
     ### assign Longitude, Latitude as coordinates and the Cast number as a variable
-    ds.coords['LATITUDE'] = ('DATETIME', Lat)
-    ds.coords['LONGITUDE'] = ('DATETIME', Lon)
+    ds.coords['latitude'] = ('DATETIME', Lat)
+    ds.coords['longitude'] = ('DATETIME', Lon)
     ds = ds.assign({'TIME_FLAG': ('DATETIME', time_flag)})
     ds = ds.assign({'CAST': ('DATETIME', Cast)})
+    ### Add a string variable for each datetime which is the string 'GC_YYYY_MM' from the string cal_dir
+    gc_string = [s for s in cal_dir.split('/') if s.startswith('GC')][0]
+    gc_string = gc_string[:10]
+    ds['gc_string'] = ('DATETIME', [gc_string] * len(ds['DATETIME']))
+
     ### add attributes and variable information
     ds,_ = process_dataset(ds)
     ### sort the dataset by longitude
     ds = ds.sortby('LONGITUDE')
     return ds
 
-def merge_datasets(cal_dir, vel_dir, dir_list_ADCP):
+
+
+def merge_datasets(cal_dir, vel_dir):
     """Merge velocity and calibration data into a single xarray dataset.
     """
-    ds_CTD = create_CTD_Dataset_with_ADCPtimes(cal_dir, dir_list_ADCP)
+    ds_CTD = create_CTD_Dataset_with_ADCPtimes(cal_dir)
     ds_ADCP = load_vel_files.create_Dataset(vel_dir)
     ## change coordinates name of PRES to DEPTH for ADCP data
     ds_CTD = ds_CTD.rename({'PRES': 'DEPTH'})

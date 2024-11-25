@@ -1,4 +1,5 @@
 basepath: "/Users/tillmoritz/Desktop/Work/WBTSData"
+safepath: "/Users/tillmoritz/Desktop/Work/WBTSData/Created_files"
 
 GC_2001_04:
   Cruise:
@@ -186,6 +187,11 @@ GC_2010_11:
     start_date: "2010-11-28"
     end_date: "2010-12-01"
     ship: "Ronald H. Brown"
+    sections: ""
+  CTD_Contributor: 
+    name: ""
+  ADCP_Contributor: 
+    name: ""
 
 GC_2011_04: 
   Cruise:
@@ -325,9 +331,11 @@ GC_2019_12:
     start_date: ""
     end_date: ""
     ship: "Ronald H Brown"
-    sections:
+    sections: ""
   CTD_Contributor: 
     name: Jay Hooper
+  ADCP_Contributor:
+    name: ""
 
 GC_2021_02:
   Cruise:
@@ -335,17 +343,19 @@ GC_2021_02:
     start_date: ""
     end_date: ""
     ship: "R/V Endeavor"
-    sections:
+    sections: ""
   CTD_Contributor: 
     name: Jay Hooper
+  ADCP_Contributor:
+    name: ""
 
 GC_2023_02:
   Cruise:
-    cruise_id: "AB2302"
-    start_date: ""
-    end_date: ""
+    cruise_id: "AB2302 / EN697"
+    start_date: "2023-02-04"
+    end_date: "2023-03-01"
     ship: "R/V Endeavor"
-    sections:
+    sections: "Abaco and 27N Florida Straits Sections"
   CTD_Contributor: 
     name: Jay Hooper
   ADCP_Contributor: 

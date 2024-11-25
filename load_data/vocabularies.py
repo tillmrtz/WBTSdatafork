@@ -34,13 +34,12 @@ standard_names = {
     "ox": "DOXY",
     "te": "TEMP",
     "sa": "PSAL",
-    "ctd_density": "POTDENS0", # Seawater potential density - need to check standard name for sigma
     "CAST": "CAST_NUMBER",
     "th": "THETA",
     "u_water_velocity_component": "U_WATER_VELOCITY",
     "v_water_velocity_component": "V_WATER_VELOCITY",
     "error_velocity": "ERROR_VELOCITY",
-    "ga": "GAMMA",
+    "ga": "GA",
     "ht": "DYN_HEIGHT",
     "gc_string": "GC_STRING",
 }
@@ -204,18 +203,11 @@ vocab_attrs = {
         "Value 2" : "End time of cast",
 
     },
-
-}
-
-# Various sensor vocabularies for OG1: http://vocab.nerc.ac.uk/scheme/OG_SENSORS/current/
-sensor_vocabs = {
-    "Seabird unpumped CTD": {
-        "sensor_type": "CTD",
-        "sensor_type_vocabulary": "https://vocab.nerc.ac.uk/collection/L05/current/130/",
-        "sensor_maker": "Sea-Bird Scientific",
-        "sensor_maker_vocabulary": "https://vocab.nerc.ac.uk/collection/L35/current/MAN0013/",
-        "sensor_model": "Sea-Bird CT Sail CTD",
-        "sensor_model_vocabulary": "http://vocab.nerc.ac.uk/collection/L22/current/TOOL1188/",
-        "long_name": "Sea-Bird CT Sail CTD",
+    "GA": {
+        "long_name": "",
+        "observation_type": "",
+        "standard_name": "",
+        "units": "gamma",
     },
+
 }
