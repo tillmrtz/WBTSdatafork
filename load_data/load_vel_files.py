@@ -75,13 +75,14 @@ def create_Dataset(vel_dir):
     nc_list = []
     for i in range(len(vel_list)):
         vel_list[i].insert(loc=0, column='DATETIME', value=np.full(len(vel_list[i]),datetime.datetime.strptime(coordinates[i][2], '%Y-%m-%d %H:%M:%S')))
+        #nc_list.append(vel_list[i].to_xarray())
         nc_list.append(vel_list[i].set_index(['DATETIME','z_depth']).to_xarray())
         Cast[i] = coordinates[i][0]
         Lat[i] = coordinates[i][3]
         Lon[i] = coordinates[i][4]
     ds = xr.concat(nc_list, dim='DATETIME')
-    ds.coords['LATITUDE'] = ('DATETIME', Lat)
-    ds.coords['LONGITUDE'] = ('DATETIME', Lon)
+    ds.coords['latitude'] = ('DATETIME', Lat)
+    ds.coords['longitude'] = ('DATETIME', Lon)
     ds = ds.assign({'CAST': ('DATETIME', Cast)})
     ### add units
     for i in range(len(column_names)):

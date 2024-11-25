@@ -1,0 +1,352 @@
+basepath: "/Users/tillmoritz/Desktop/Work/WBTSData"
+
+GC_2001_04:
+  Cruise:
+    cruise_id: "AB0104 / OC365-9"
+    start_date: "2001-04-26"
+    end_date: "2001-05-07"
+    ship: "R/V OCEANUS"
+    sections: "Abaco and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Carlos A. Fonseca
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2002_06:
+  Cruise:
+    cruise_id: "AB0206 / RB0204"
+    start_date: "2002-06-17"
+    end_date: "2002-06-29"
+    ship: "RONALD H. BROWN"
+    sections: "Abaco, Florida Straits, and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Carlos A. Fonseca
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2003_02:
+  Cruise:
+    cruise_id: "AB0302 / RB0301"
+    start_date: "2003-02-03"
+    end_date: "2003-03-15"
+    ship: "RONALD H. BROWN"
+    sections: "Abaco and Florida Straits Sections"
+  CTD_Contributor: 
+    name: Carlos A. Fonseca
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2004_09:
+  Cruise:
+    cruise_id: "AB0409 / RB0408"
+    start_date: "2004-09-22"
+    end_date: "2004-10-03"
+    ship: "RONALD H. BROWN"
+    sections: "Abaco and Florida Straits Sections"
+  CTD_Contributor: 
+    name: Carlos A. Fonseca
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2005_05: 
+  Cruise:
+    cruise_id: "AB0505 / KN182"
+    start_date: "2005-05-03"
+    end_date: "2005-05-26"
+    ship: "R/V Knorr"
+    sections: "Abaco and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2005_09: 
+  Cruise:
+    cruise_id: "AB0509 / RB0504"
+    start_date: "2005-09-12"
+    end_date: "2005-09-24"
+    ship: "Ronald H. Brown"
+    sections: "Abaco, Florida Straits, and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Carlos A. Fonseca
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2006_03: 
+  Cruise:
+    cruise_id: "AB0603 / RB0602"
+    start_date: "2006-03-09"
+    end_date: "2006-03-28"
+    ship: "Ronald H. Brown"
+    sections: "Abaco, Florida Straits, and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Carlos A. Fonseca
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2006_09: 
+  Cruise:
+    cruise_id: "AB0609 / SJ-06-14"
+    start_date: "2006-09-25"
+    end_date: "2006-10-12"
+    ship: "R/V SEWARD JOHNSON"
+    sections: "Abaco and 27N Florida Straits Sections"
+  CTD_Contributor: 
+    name: Carlos A. Fonseca
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2007_03: 
+  Cruise:
+    cruise_id: "AB0703 / RB-07-01"
+    start_date: "2007-03-23"
+    end_date: "2007-04-10"
+    ship: "RONALD H BROWN"
+    sections: "Abaco, Northwest Providence Channel and 27N Florida Straits Sections"
+  CTD_Contributor: 
+    name: Carlos A. Fonseca
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2007_09: 
+  Cruise:
+    cruise_id: "AB0709 / RB0708"
+    start_date: "2007-09-11"
+    end_date: "2007-09-22"
+    ship: "RONALD H. BROWN"
+    sections: "Abaco and Florida Straits Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2008_04: 
+  Cruise:
+    cruise_id: "AB0804 / SJ0804"
+    start_date: "2008-04-04"
+    end_date: "2008-04-26"
+    ship: "R/V Seward Johnson"
+    sections: "Abaco and Florida Straits Sections"
+  CTD_Contributor: 
+    name: Carlos A. Fonseca
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2008_09: 
+  Cruise:
+    cruise_id: "AB0809 / CH0808"
+    start_date: "2008-09-26"
+    end_date: "2008-10-03"
+    ship: "R/V Cape Hatteras"
+    sections: "Abaco, Florida Straits, and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2009_04: 
+  Cruise:
+    cruise_id: "AB0904 / RB0901"
+    start_date: "2009-04-17"
+    end_date: "2009-05-05"
+    ship: "RONALD H BROWN"
+    sections: "Abaco, Florida Straits, and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2009_11: 
+  Cruise:
+    cruise_id: "AB0911 / D345"
+    start_date: "2009-11-21"
+    end_date: "2009-12-05"
+    ship: "RRS Discovery"
+    sections: "Abaco and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2010_03:
+  Cruise:
+    cruise_id: "AB1003 / OC459-1/2"
+    start_date: "2010-03-23"
+    end_date: "2010-04-17"
+    ship: "R/V OCEANUS"
+    sections: "Abaco, Northwest Providence Channel and 27N Florida Straits Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2010_11: 
+  Cruise:
+    cruise_id: "AB1011 / RB1009"
+    start_date: "2010-11-28"
+    end_date: "2010-12-01"
+    ship: "Ronald H. Brown"
+
+GC_2011_04: 
+  Cruise:
+    cruise_id: "AB1104 / KN200-04"
+    start_date: "2011-04-13"
+    end_date: "2011-05-03"
+    ship: "R/V KNORR"
+    sections: "Abaco, Florida Straits, and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+  
+GC_2012_02: 
+  Cruise:
+    cruise_id: "AB1202 / RB1201"
+    start_date: "2012-02-15"
+    end_date: "2012-03-05"
+    ship: "Ronald H Brown"
+    sections: "Abaco and Florida Straits Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2012_09:
+  Cruise:
+    cruise_id: "AB1209 / EN517"
+    start_date: "2012-09-24"
+    end_date: "2012-10-10"
+    ship: "R/V ENDEAVOR"
+    sections: "Abaco, Florida Straits, and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2013_02:
+  Cruise:
+    cruise_id: "AB1302 / RB1302"
+    start_date: "2012-02-19"
+    end_date: "2019-03-04"
+    ship: "RONALD H. BROWN"
+    sections: "Abaco, Florida Straits, and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2014_03: 
+  Cruise:
+    cruise_id: "AB1403 / AE1404"
+    start_date: "2014-03-15"
+    end_date: "2014-03-31"
+    ship: "R/V ATLANTIC EXPLORER"
+    sections: "Abaco, Florida Straits, and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2015_02:
+  Cruise:
+    cruise_id: "AB1502 / EN551"
+    start_date: "2015-02-14"
+    end_date: "2015-02-27"
+    ship: "R/V ENDEAVOR"
+    sections: "Abaco, Florida Straits, and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2015_10:
+  Cruise:
+    cruise_id: "AB1510 / EN570"
+    start_date: "2015-10-03"
+    end_date: "2015-10-19"
+    ship: "R/V ENDEAVOR"
+    sections: "Abaco, Florida Straits, and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2016_02:
+  Cruise:
+    cruise_id: "AB1602 / EN574"
+    start_date: "2016-02-16"
+    end_date: "2016-02-28"
+    ship: "R/V ENDEAVOR"
+    sections: "Abaco, Florida Straits, and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2017_05: 
+  Cruise:
+    cruise_id: "AB1705 / EN598"
+    start_date: "2017-05-08"
+    end_date: "2017-05-24"
+    ship: "R/V ENDEAVOR"
+    sections: "Abaco, Florida Straits, and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2018_02:
+  Cruise:
+    cruise_id: "AB1802 / RB1801"
+    start_date: "2018-02-23"
+    end_date: "2018-03-01"
+    ship: "RONALD H. BROWN"
+    sections: "some Abaco and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2018_11: 
+  Cruise:
+    cruise_id: "AB1811 / AE1833"
+    start_date: "2018-11-17"
+    end_date: "2018-12-03"
+    ship: "R/V ATLANTIC EXPLORER"
+    sections: "Abaco, Florida Straits, and Northwest Providence Channel Sections"
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith
+
+GC_2019_12:
+  Cruise:
+    cruise_id: "AB1912"
+    start_date: ""
+    end_date: ""
+    ship: "Ronald H Brown"
+    sections:
+  CTD_Contributor: 
+    name: Jay Hooper
+
+GC_2021_02:
+  Cruise:
+    cruise_id: "AB2102"
+    start_date: ""
+    end_date: ""
+    ship: "R/V Endeavor"
+    sections:
+  CTD_Contributor: 
+    name: Jay Hooper
+
+GC_2023_02:
+  Cruise:
+    cruise_id: "AB2302"
+    start_date: ""
+    end_date: ""
+    ship: "R/V Endeavor"
+    sections:
+  CTD_Contributor: 
+    name: Jay Hooper
+  ADCP_Contributor: 
+    name: Ryan Smith

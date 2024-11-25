@@ -76,7 +76,7 @@ vocab_attrs = {
     },
     "DATETIME": {
         "long_name": "time of measurement",
-        "units": "UTC time",
+    #    "units": "UTC time",
         "observation_type": "measured",
         "standard_name": "time",
         "URI": "https://vocab.nerc.ac.uk/collection/P02/current/AYMD/",
