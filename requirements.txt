@@ -1,0 +1,12 @@
+netcdf4
+xarray
+numpy
+matplotlib
+pandas  
+seaborn 
+scipy 
+cmocean 
+tqdm
+gsw
+cartopy
+importlib
