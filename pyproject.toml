@@ -1,0 +1,45 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+  "setuptools>=42",
+  "setuptools-scm[toml]>=3.4",
+  "wheel",
+]
+
+[project]
+name = "WBTSdata"
+description = "Loading data from the WBTS project"
+readme = "README.md"
+license = { file = "LICENSE" }
+maintainers = [
+  { name = "Till Moritz", email = "till.moritz@uni-hamburg.de" },
+  { name = "Eleanor Frajka-Williams", email = "eleanorfrajka@gmail.com"}
+]
+requires-python = ">=3.8"
+classifiers = [
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dynamic = [
+  "dependencies",
+  "version",
+]
+urls.documentation = "https://github.com/ifmeo-hamburg/WBTSdata"
+urls.homepage = "https://github.com/ifmeo-hamburg/WBTSdata"
+urls.repository = "https://github.com/ifmeo-hamburg/WBTSdata"
+
+[tool.setuptools]
+packages = [
+  "load_data",
+]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+dependencies = { file = [
+  "requirements.txt",
+] }
+readme = { file = "README.md", content-type = "text/markdown" }
