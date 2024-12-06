@@ -5,6 +5,7 @@ import xarray as xr
 import datetime
 from load_data import missing_datetime_2005_05 as mdt
 from load_data.convert import process_dataset
+from load_data import tools
 
 column_names = ["pr", "te", "th", "sa", "ht", "ga", "ox"]
 units = ["dbars", "deg c", "deg c", "psu", "dyn. cm", "gamma", "umol/kg"]
@@ -89,9 +90,12 @@ def create_coordinates(cal_dir):
             coordinates = sorted(coordinates, key=lambda x: x[0])
     return coordinates
 
-def create_Dataset(cal_dir):
+def create_Dataset(cal_dir, config):
     """Create a xr.Dataset from the calibration data files in a directory.
     """
+    if not isinstance(config, dict):
+        config = tools.get_config()
+
     cal_list = load_cal_from_file(cal_dir)
     coordinates = create_coordinates(cal_dir)
 
@@ -124,7 +128,7 @@ def create_Dataset(cal_dir):
     ds['gc_string'] = ('DATETIME', [gc_string] * len(ds['DATETIME']))
 
     ### add attributes and variable information
-    ds,_ = process_dataset(ds)
+    ds,_ = process_dataset(ds, config)
     ### sort the dataset by longitude
     ds = ds.sortby('LONGITUDE')
 

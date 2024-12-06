@@ -2,11 +2,10 @@ import numpy as np
 import xarray as xr
 from load_data import vocabularies
 from load_data import attr_input
-import gsw
 import logging
-from datetime import datetime
 import yaml
 import time
+from . import tools
 
 _log = logging.getLogger(__name__)
 
@@ -90,40 +89,10 @@ def assign_variable_attributes(ds, vocab_attrs=vocabularies.vocab_attrs, unit_fo
     return ds, attr_warnings
 
 
-def convert_units(ds, preferred_units=vocabularies.preferred_units, unit_conversion=vocabularies.unit_conversion):
-    """
-    Convert the units of variables in an xarray Dataset to preferred units.  This is useful, for instance, to convert cm/s to m/s.
+def attr_cruise(ds, config):
+    if not isinstance(config, dict):
+        config = tools.get_config()
 
-    Parameters
-    ----------
-    ds (xarray.Dataset): The dataset containing variables to convert.
-    preferred_units (list): A list of strings representing the preferred units.
-    unit_conversion (dict): A dictionary mapping current units to conversion information.
-    Each key is a unit string, and each value is a dictionary with:
-        - 'factor': The factor to multiply the variable by to convert it.
-        - 'units_name': The new unit name after conversion.
-
-    Returns
-    -------
-    xarray.Dataset: The dataset with converted units.
-    """
-
-    for var in ds.variables:
-        current_unit = ds[var].attrs.get('units')
-        if current_unit in unit_conversion:
-            conversion_info = unit_conversion[current_unit]
-            new_unit = conversion_info['units_name']
-            if new_unit in preferred_units:
-                conversion_factor = conversion_info['factor']
-                ds[var] = ds[var] * conversion_factor
-                ds[var].attrs['units'] = new_unit
-
-    return ds
-
-def attr_cruise(ds):
-    # Open and load the YAML file
-    with open('load_data/config.yaml', 'r') as file:
-        config = yaml.safe_load(file)
     GC_string = ds.GC_STRING.values[0]
     project_id = config[GC_string]['Cruise']['cruise_id']
     platform = config[GC_string]['Cruise']['ship']
@@ -162,7 +131,7 @@ def attr_cruise(ds):
                } 
     return attr_cruise 
 
-def add_attributes(ds):
+def add_attributes(ds, config):
     """
     Add attributes to the variables in a dataset.
 
@@ -175,9 +144,12 @@ def add_attributes(ds):
     -------
     xarray.Dataset: The dataset with added attributes.
     """
+    if not isinstance(config, dict):
+        config = tools.get_config()
+
     attributes = attr_input.attr_general
     ### add the cruise specific attributes
-    attributes.update(attr_cruise(ds))
+    attributes.update(attr_cruise(ds, config))
 
     if 'TEMP' in ds.variables:
         attributes.update(attr_input.attr_CTD)
@@ -193,9 +165,11 @@ def add_attributes(ds):
         ds.attrs[key] = value
     return ds
 
-def process_dataset(ds):
+def process_dataset(ds, config):
     # Rename variables and attributes, and convert units where necessary
     #-------------------------------------------------------------------
+    if not isinstance(config, dict):
+        config = tools.get_config()
     # Extract the dataset for 'sg_data_point'
     # Must be after split_ds
     renamed_ds = rename_dimensions(ds)
@@ -203,12 +177,12 @@ def process_dataset(ds):
     # Must be after rename_dimensions
     renamed_ds = rename_variables(renamed_ds)
     # Convert units in renamed_ds (especially cm/s to m/s)
-    renamed_ds = convert_units(renamed_ds)
+    renamed_ds = tools.convert_units(renamed_ds)
     # Assign attributes to the variables
     # Must be ater rename_variables
     renamed_ds, attr_warnings = assign_variable_attributes(renamed_ds)
     # Add attributes to the dataset
-    renamed_ds = add_attributes(renamed_ds)
+    renamed_ds = add_attributes(renamed_ds, config)
 
     #vars_to_remove = vocabularies.vars_to_remove
     #ds_new = ds_new.drop_vars([var for var in vars_to_remove if var in ds_new.variables])
