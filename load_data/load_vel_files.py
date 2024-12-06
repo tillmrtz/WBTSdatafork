@@ -61,9 +61,11 @@ def create_coordinates(vel_dir):
         end_coordinates = sorted(end_coordinates, key=lambda x: x[0])
     return avg_coordinates, start_coordinates, end_coordinates
 
-def create_Dataset(vel_dir):
+def create_Dataset(vel_dir, config=None):
     """Create a xr.Dataset from the calibration data files in a directory.
     """
+    if not isinstance(config, dict):
+        config = tools.get_config()
     vel_list = load_vel_from_file(vel_dir)
     avg_coords, start_coords, end_coords = create_coordinates(vel_dir)
     coordinates = start_coords
@@ -94,7 +96,7 @@ def create_Dataset(vel_dir):
     ds['gc_string'] = ('DATETIME', [gc_string] * len(ds['DATETIME']))
         
     ### add attributes and variable information
-    ds,_ = process_dataset(ds)
+    ds,_ = process_dataset(ds, config)
     ### sort the dataset by longitude
     ds = ds.sortby('LONGITUDE')
 
