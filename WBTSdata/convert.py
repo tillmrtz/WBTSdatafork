@@ -1,7 +1,7 @@
 import numpy as np
 import xarray as xr
-from load_data import vocabularies
-from load_data import attr_input
+from WBTSdata import vocabularies
+from WBTSdata import attr_input
 import logging
 import yaml
 import time
