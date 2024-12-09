@@ -1,7 +1,7 @@
 :mod:`WBTSdata API`
 -----------------------
 
-.. automodule:: WBTSdata.load_cal_files
+.. automodule:: load_data.load_cal_files
    :members:
    :undoc-members:
 
