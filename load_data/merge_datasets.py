@@ -4,6 +4,7 @@ import os
 import xarray as xr
 import datetime
 from load_data import load_vel_files, load_cal_files, tools, convert
+import glob
 
 
 def dir_list_CTD(input_dir):
@@ -121,19 +122,29 @@ def merge_datasets(cal_dir, vel_dir, config=None):
         ds_merge.attrs['platform'] = 'CTD and Lowered Acoustic Doppler Current Profilers (LADCP)'
     return ds_merge
     
-'''def merge_datasets(cal_dir, vel_dir, config=None):
-    """Merge velocity and calibration data into a single xarray dataset.
-    """
-    if not isinstance(config, dict):
-        config = tools.get_config()
-    ds_CTD = create_CTD_Dataset_with_ADCPtimes(cal_dir, config)
-    ds_ADCP = load_vel_files.create_Dataset(vel_dir, config)
-    ## change coordinates name of PRES to DEPTH for ADCP data
-    ds_CTD = ds_CTD.rename({'PRES': 'DEPTH'})
-    ## merge the two datasets
-    ds_merge = xr.merge([ds_CTD, ds_ADCP], compat='override')
-    ### change their attributes
-    ds_merge.attrs['title'] = 'CTD and LADCP data of the Abaco Cruise'
-    ds_merge.attrs['platform'] = 'CTD and Lowered Acoustic Doppler Current Profilers (LADCP)'
-    return ds_merge
-'''
+def merge_years(merge_dir):
+    # Get a list of all files in the merged data directory
+    merged_files = glob.glob(os.path.join(merge_dir, 'Merged', '*.nc'))
+
+    processed_datasets = []
+    for file1 in merged_files:
+        ds_new = xr.open_dataset(file1)
+        if ds_new:
+            processed_datasets.append(ds_new)
+        else:
+            print(f"Warning: Dataset for dive number {ds.attrs['dive_number']} is empty or invalid.")
+    concatenated_ds = xr.concat(processed_datasets, dim='DATETIME')
+    ds_all = concatenated_ds.sortby('DATETIME')
+    ds_all.attrs['geospatial_vertical_max'] = ds_all['DEPTH'].max().values
+    ds_all.attrs['geospatial_vertical_min'] = ds_all['DEPTH'].min().values
+    ds_all.attrs['geospatial_lat_min'] = ds_all['LATITUDE'].min().values
+    ds_all.attrs['geospatial_lat_max'] = ds_all['LATITUDE'].max().values
+    ds_all.attrs['geospatial_lon_min'] = ds_all['LONGITUDE'].min().values
+    ds_all.attrs['geospatial_lon_max'] = ds_all['LONGITUDE'].max().values
+    ds_all.attrs['time_cruise_start'] = str(ds_all['DATETIME'].min().values.astype('datetime64[D]'))
+    ds_all.attrs['time_cruise_end'] = str(ds_all['DATETIME'].max().values.astype('datetime64[D]'))
+    ds_all.attrs['sections'] = "Abaco, Northwest Providence Channel and 27N Florida Straits Sections"
+    return ds_all
+
+
+

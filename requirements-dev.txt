@@ -1,0 +1,17 @@
+netcdf4
+xarray
+numpy
+matplotlib
+pandas  
+seaborn 
+scipy 
+cmocean 
+tqdm
+gsw
+cartopy
+nbsphinx
+nbconvert
+pypandoc
+myst_parser
+sphinx-rtd-theme
+sphinx
