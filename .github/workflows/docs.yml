@@ -34,12 +34,12 @@ jobs:
 #      run: |
 #        python -m pip install -e . --no-deps --force-reinstall
 
-    - name: Build documentation
-      shell: bash -l {0}
-      run: |
-        set -e
-        jupyter nbconvert --to notebook --execute notebooks/demo.ipynb --output=demo.ipynb
-        mv notebooks/*output.ipynb docs/source/
-        pushd docs
-        make clean html 
-        popd
+#    - name: Build documentation
+#      shell: bash -l {0}
+#      run: |
+#        set -e
+#        jupyter nbconvert --to notebook --execute notebooks/demo.ipynb --output=demo.ipynb
+#        mv notebooks/*output.ipynb docs/source/
+#        pushd docs
+#        make clean html 
+#        popd
