@@ -16,7 +16,7 @@ def get_config():
     script_dir = pathlib.Path(__file__).parent.absolute()
     parent_dir = script_dir.parents[0]
     rootdir = parent_dir
-    config_dir = os.path.join(rootdir, 'load_data')
+    config_dir = os.path.join(rootdir, 'WBTSdata')
 
     ### import basepath from mission_config.yaml
     configpath = os.path.join(config_dir, 'config.yaml')

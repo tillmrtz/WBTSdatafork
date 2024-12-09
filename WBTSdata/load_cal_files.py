@@ -3,9 +3,9 @@ import pandas as pd
 import os
 import xarray as xr
 import datetime
-from load_data import missing_datetime_2005_05 as mdt
-from load_data.convert import process_dataset
-from load_data import tools
+from WBTSdata import missing_datetime_2005_05 as mdt
+from WBTSdata.convert import process_dataset
+from WBTSdata import tools
 
 column_names = ["pr", "te", "th", "sa", "ht", "ga", "ox"]
 units = ["dbars", "deg c", "deg c", "psu", "dyn. cm", "gamma", "umol/kg"]
