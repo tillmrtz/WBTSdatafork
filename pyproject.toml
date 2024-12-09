@@ -34,7 +34,7 @@ urls.repository = "https://github.com/ifmeo-hamburg/WBTSdata"
 
 [tool.setuptools]
 packages = [
-  "load_data",
+  "WBTSdata",
 ]
 include-package-data = true
 
