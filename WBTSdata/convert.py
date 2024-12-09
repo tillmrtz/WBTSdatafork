@@ -90,9 +90,22 @@ def assign_variable_attributes(ds, vocab_attrs=vocabularies.vocab_attrs, unit_fo
 
 
 def attr_cruise(ds, config):
+    """
+    Generate a dictionary of attributes for a cruise based on the given dataset and configuration.
+
+    Parameters:
+        ds (xarray.Dataset): The dataset containing the cruise data.
+        config (dict): The configuration dictionary.
+
+    Returns:
+        dict: A dictionary containing the cruise attributes.
+    """
+    
+    # If the config is not provided, get it using the tools.get_config() function
     if not isinstance(config, dict):
         config = tools.get_config()
 
+    # Extract the necessary attributes from the dataset and configuration
     GC_string = ds.GC_STRING.values[0]
     project_id = config[GC_string]['Cruise']['cruise_id']
     platform = config[GC_string]['Cruise']['ship']
@@ -166,8 +179,20 @@ def add_attributes(ds, config):
     return ds
 
 def process_dataset(ds, config):
-    # Rename variables and attributes, and convert units where necessary
-    #-------------------------------------------------------------------
+    """
+    Process a dataset by renaming dimensions and variables, assigning attributes, and adding attributes.
+
+    Parameters
+    ----------
+    ds (xarray.Dataset): The dataset to process.
+    config (dict): The configuration dictionary.
+
+    Returns
+    -------
+    xarray.Dataset: The processed dataset.
+    """
+
+
     if not isinstance(config, dict):
         config = tools.get_config()
     # Extract the dataset for 'sg_data_point'
@@ -188,18 +213,3 @@ def process_dataset(ds, config):
     #ds_new = ds_new.drop_vars([var for var in vars_to_remove if var in ds_new.variables])
 
     return renamed_ds, attr_warnings
-
-def delete_variable_attr(variable):
-    """
-    Delete all attributes of a variable.
-
-    Parameters
-    ----------
-    variable (xarray.DataArray): The variable whose attributes will be deleted.
-
-    Returns
-    -------
-    xarray.DataArray: The variable with no attributes.
-    """
-    variable.attrs = {}
-    return variable

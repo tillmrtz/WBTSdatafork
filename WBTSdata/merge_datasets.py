@@ -8,7 +8,19 @@ import glob
 
 
 def dir_list_CTD(input_dir):
-    '''create a list with all the directories that contain the CTD data'''
+    '''
+    create a list with all the directories that contain the CTD data
+    
+    Parameters
+    ----------
+    input_dir : str
+        The path to the directory containing the CTD data
+
+    Returns
+    -------
+    dir_list_CTD : list
+        A list of strings, each string is a path to a directory containing CTD data
+    '''
     dir_list_CTD = []
     for root, dirs,files in os.walk(input_dir):
         if 'CTD' in dirs: 
@@ -20,7 +32,19 @@ def dir_list_CTD(input_dir):
     return dir_list_CTD
 
 def dir_list_ADCP(input_dir):
-    ### create a list with all the directories that contain the LADCP data
+    '''
+    create a list with all the directories that contain the ADCP data
+    
+    Parameters
+    ----------
+    input_dir : str
+        The path to the directory containing the ADCP data
+        
+    Returns
+    -------
+    dir_list_ADCP : list
+        A list of strings, each string is a path to a directory containing ADCP data
+    '''
     dir_list_ADCP = []
     for root, dirs,files in os.walk(input_dir):
         if 'FINAL_ADCP_PRODUCTS' and 'ladcp_velfiles' in dirs: 
@@ -36,7 +60,26 @@ def dir_list_ADCP(input_dir):
 
 
 def create_coordinates_with_ADCPtimes(cal_dir, input_dir=None):
-    '''create the coordinates for the calibration data with the time from the ADCP data.'''
+    '''
+    Create a list of coordinates for the CTD data with the corresponding ADCP times
+    
+    Parameters
+    ----------
+    cal_dir : str
+        The path to the directory containing the CTD calibration data
+    input_dir : str
+        The path to the directory containing the CTD data
+    
+    Returns
+    -------
+    coordinates : list
+        A list of lists, each list contains the following elements:
+            - Cast number
+            - Latitude
+            - Longitude
+            - Date and time of the ADCP data
+            - Time flag
+    '''
     if not isinstance(input_dir, str):
         config = tools.get_config()
         input_dir = config['input_dir']
@@ -57,7 +100,20 @@ def create_coordinates_with_ADCPtimes(cal_dir, input_dir=None):
     return coordinates
 
 def create_CTD_Dataset_with_ADCPtimes(cal_dir, config=None):
-    """Create a xr.Dataset from the calibration data files in a directory.
+    """
+    Create a CTD dataset with the corresponding ADCP times.
+
+    Parameters
+    ----------
+    cal_dir : str
+        The path to the directory containing the CTD calibration data
+    config : dict(optional)
+        The configuration dictionary
+
+    Returns
+    -------
+    ds : xarray.Dataset
+        The dataset containing the CTD data with the corresponding ADCP times
     """
     if not isinstance(config, dict):
         config = tools.get_config()
@@ -96,7 +152,20 @@ def create_CTD_Dataset_with_ADCPtimes(cal_dir, config=None):
 
 
 def merge_datasets(cal_dir, vel_dir, config=None):
-    """Merge velocity and calibration data into a single xarray dataset.
+    """
+    Merge the CTD and ADCP datasets.
+    
+    Parameters
+    ----------
+    cal_dir : str
+        The path to the directory containing the CTD calibration data
+    vel_dir : str
+        The path to the directory containing the ADCP data
+
+    Returns
+    -------
+    ds_merge : xarray.Dataset
+        The dataset containing the merged CTD and ADCP data.
     """
     if not isinstance(config, dict):
         config = tools.get_config()
@@ -123,7 +192,19 @@ def merge_datasets(cal_dir, vel_dir, config=None):
     return ds_merge
     
 def merge_years(merge_dir):
-    # Get a list of all files in the merged data directory
+    '''
+    Merge the datasets of different years into one dataset
+    
+    Parameters
+    ----------
+    merge_dir : str
+        The path to the directory containing the merged datasets of different years
+        
+    Returns
+    -------
+    ds_all : xarray.Dataset
+        The dataset containing the merged data of all years
+    '''
     merged_files = glob.glob(os.path.join(merge_dir, 'Merged', '*.nc'))
 
     processed_datasets = []

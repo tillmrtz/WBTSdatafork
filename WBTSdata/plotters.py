@@ -3,6 +3,22 @@ import matplotlib.pyplot as plt
 
 
 def plot_cast_over_time(ds_all):
+    '''
+    Plot the cast over time for the given dataset. The dataset should contain the following variables:
+    - DATETIME: The datetime of the cast
+    - LONGITUDE: The longitude of the cast
+    - GC_STRING: The gc_string of the cast
+    
+    Parameters
+    ----------
+    ds_all : xarray.Dataset
+        The dataset containing the data to plot.
+        
+    Returns
+    -------
+    fig, ax : matplotlib.figure.Figure, matplotlib.axes.Axes
+        The figure and axes of the plot.
+    '''
     fig, ax = plt.subplots(figsize=(15, 8))
     ax.set_title('Cast over Time', fontsize=15)
 
