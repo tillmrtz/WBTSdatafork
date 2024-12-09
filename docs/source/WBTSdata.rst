@@ -1,26 +1,26 @@
 :mod:`WBTSdata API`
 -----------------------
 
-.. automodule:: load_data.load_cal_files
+.. automodule:: WBTSdata.load_cal_files
    :members:
    :undoc-members:
 
-.. automodule:: load_data.load_vel_files
+.. automodule:: WBTSdata.load_vel_files
    :members:
    :undoc-members:
 
-.. automodule:: load_data.merge_datasets
+.. automodule:: WBTSdata.merge_datasets
    :members:
    :undoc-members:
 
-.. automodule:: load_data.convert
+.. automodule:: WBTSdata.convert
    :members:
    :undoc-members:
 
-.. automodule:: load_data.tools
+.. automodule:: WBTSdata.tools
    :members:
    :undoc-members:
 
-.. automodule:: load_data.plotters
+.. automodule:: WBTSdata.plotters
    :members:
    :undoc-members:
