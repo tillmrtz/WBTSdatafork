@@ -188,3 +188,18 @@ def process_dataset(ds, config):
     #ds_new = ds_new.drop_vars([var for var in vars_to_remove if var in ds_new.variables])
 
     return renamed_ds, attr_warnings
+
+def delete_variable_attr(variable):
+    """
+    Delete all attributes of a variable.
+
+    Parameters
+    ----------
+    variable (xarray.DataArray): The variable whose attributes will be deleted.
+
+    Returns
+    -------
+    xarray.DataArray: The variable with no attributes.
+    """
+    variable.attrs = {}
+    return variable

@@ -1,7 +1,7 @@
 input_dir: "/Users/tillmoritz/Desktop/Work/WBTSData"
-output_dir: "/Users/tillmoritz/Desktop/Work/WBTSData/Created_files"
-input_dir: "/Users/eddifying/Dropbox/data/RAPID-data/hydro-data/WBTS-dup"
-output_dir: "/Users/eddifying/Cloudfree/gitlab-cloudfree/WBTSdata/data"
+output_dir: "/Users/tillmoritz/Desktop/Work/Created_files"
+#input_dir: "/Users/eddifying/Dropbox/data/RAPID-data/hydro-data/WBTS-dup"
+#output_dir: "/Users/eddifying/Cloudfree/gitlab-cloudfree/WBTSdata/data"
 
 GC_2001_04:
   Cruise:
