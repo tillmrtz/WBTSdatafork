@@ -12,8 +12,19 @@ units = ["dbars", "deg c", "deg c", "psu", "dyn. cm", "gamma", "umol/kg"]
 
 
 def load_cal_from_file(cal_dir):
-    """Load all calibration data files (file.cal) from a directory.
-    Returns a list with the calibration data as pandas DataFrames.
+    """
+    Load calibration data from a directory of .cal files.
+
+    Parameters
+    ----------
+
+    cal_dir : str
+        The directory containing the .cal files.
+
+    Returns
+    -------
+    list
+        A list of pandas DataFrames containing the calibration data.
     """
     cal_files = [f for f in os.listdir(cal_dir) if f.endswith('.cal')]
     cal_list = []
@@ -24,8 +35,18 @@ def load_cal_from_file(cal_dir):
     return cal_list
 
 def create_coordinates(cal_dir):
-    '''create a list with all infromation in the first line and second line
-        but for the second line take the fifth element as the date in the fromat xx/xx/xx
+    '''
+    Create a list of coordinates from the calibration files in a directory.
+
+    Parameters
+    ----------
+    cal_dir : str
+        The directory containing the .cal files.
+
+    Returns
+    -------
+    list
+        A list of lists containing the coordinates.
     '''
     cal_files = [f for f in os.listdir(cal_dir) if f.endswith('.cal')]
     coordinates = []
@@ -91,7 +112,20 @@ def create_coordinates(cal_dir):
     return coordinates
 
 def create_Dataset(cal_dir, config):
-    """Create a xr.Dataset from the calibration data files in a directory.
+    """
+    Create a xr.Dataset from the calibration data files in a directory.
+
+    Parameters
+    ----------
+    cal_dir : str
+        The directory containing the .cal files.
+    config : dict
+        The configuration dictionary.
+
+    Returns
+    -------
+    xr.Dataset
+        The dataset containing the calibration data.
     """
     if not isinstance(config, dict):
         config = tools.get_config()
@@ -137,7 +171,18 @@ def create_Dataset(cal_dir, config):
 
 
 def create_complete_Dataset(directory_list):
-    """Create a xr.Dataset from the calibration data files in a list of directories.
+    """
+    Create a xr.Dataset from a list of directories containing calibration data files.
+
+    Parameters
+    ----------
+    directory_list : list
+        A list of directories containing the .cal files.
+        
+    Returns
+    -------
+    xr.Dataset
+        The dataset containing the calibration data.
     """
     ds_list = []
     for directory in directory_list:

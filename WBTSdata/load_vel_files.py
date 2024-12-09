@@ -9,8 +9,19 @@ column_names = ['z_depth', 'u_water_velocity_component', 'v_water_velocity_compo
 units = ['meters', 'cm_per_s', 'cm_per_s', 'cm_per_s']
 
 def load_vel_from_file(vel_dir):
-    """Load all velocity data files (file.vel) from a directory.
-    Returns a list with the velocity data as pandas DataFrames.
+    """
+    Load the velocity data from the files in the directory vel_dir.
+    Returns a list of pandas DataFrames.
+    
+    Parameters
+    ----------
+    vel_dir : str
+        The directory containing the velocity data files.
+
+    Returns
+    -------
+    list
+        A list of pandas DataFrames containing the velocity data.
     """
     vel_files = [f for f in os.listdir(vel_dir) if f.endswith('.vel')]
     vel_list = []
@@ -21,8 +32,19 @@ def load_vel_from_file(vel_dir):
     return vel_list
 
 def create_coordinates(vel_dir):
-    ''' extract all the relevenat infromation from the file that is needed for the dataset.
-        Returns a list with the information for each file.
+    '''
+    Create a list of coordinates from the velocity data files in the directory vel_dir.
+    Returns three lists of coordinates: avg_coordinates, start_coordinates, end_coordinates.
+
+    Parameters
+    ----------
+    vel_dir : str
+        The directory containing the velocity data files.
+
+    Returns
+    -------
+    list
+        A list of coordinates for the average, start, and end of the cast.
     '''
     vel_files = [f for f in os.listdir(vel_dir) if f.endswith('.vel')]
 
@@ -62,7 +84,20 @@ def create_coordinates(vel_dir):
     return avg_coordinates, start_coordinates, end_coordinates
 
 def create_Dataset(vel_dir, config=None):
-    """Create a xr.Dataset from the calibration data files in a directory.
+    """
+    Create a xr.Dataset from the velocity data files in the directory vel_dir.
+
+    Parameters
+    ----------
+    vel_dir : str
+        The directory containing the velocity data files.
+    config : dict(optional)
+        The configuration dictionary.
+        
+    Returns
+    -------
+    xr.Dataset
+        A xr.Dataset containing the velocity data.
     """
     if not isinstance(config, dict):
         config = tools.get_config()
@@ -103,7 +138,18 @@ def create_Dataset(vel_dir, config=None):
     return ds
 
 def create_complete_Dataset(directory_list):
-    """Create a xr.Dataset from a list of directories containing velocity data files.
+    """
+    Create a xr.Dataset from the velocity data files in the list of directories directory_list.
+
+    Parameters
+    ----------
+    directory_list : list
+        A list of directories containing the velocity data files.
+
+    Returns
+    -------
+    xr.Dataset
+        A xr.Dataset containing the velocity data.
     """
     ds_list = []
     for vel_dir in directory_list:
