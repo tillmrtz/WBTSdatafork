@@ -37,7 +37,7 @@ jobs:
 #      run: |
 #        set -e
 #        jupyter nbconvert --to notebook --execute notebooks/demo.ipynb --output=demo.ipynb
-#       mv notebooks/*output.ipynb docs/source/
+#        mv notebooks/*output.ipynb docs/source/
 #        pushd docs
 #        make clean html 
 #        popd
