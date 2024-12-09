@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import xarray as xr
 import datetime
-from load_data.convert import process_dataset
+from WBTSdata.convert import process_dataset
 
 column_names = ['z_depth', 'u_water_velocity_component', 'v_water_velocity_component', 'error_velocity']
 units = ['meters', 'cm_per_s', 'cm_per_s', 'cm_per_s']
