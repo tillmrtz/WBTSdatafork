@@ -17,7 +17,7 @@ year = datetime.datetime.now(tz=datetime.timezone.utc).date().year
 
 # General information about the project.
 project = 'WBTSdata'
-author = 'Eleanor Frajka-Williams, Till Moritz'
+author = 'Till Moritz, Eleanor Frajka-Williams'
 copyright = f"{year}, {author}"
 release = 'v0.0.1'
 
