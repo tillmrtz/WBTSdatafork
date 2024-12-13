@@ -8,9 +8,14 @@ Welcome to WBTSdata's documentation!
 
 WBTSdata is a Python package aiming to create netCDF files for each individual year of the Western Boundary Times Series (WBTS) project.
 
-The data for the WBTS project is collected by the 
+The WBTS is a comprehensive observational program designed to monitor the Atlantic Meridional Overturning Circulation (AMOC) and its associated boundary currents, such as the Florida and Antilles Currents. These observations are critical for understanding the role of ocean circulation in regulating global climate and assessing changes over time.
+The program is primarily conducted by the National Oceanic and Atmospheric Administration (NOAA). Data are collected along hydrographic sections using ship-based methods, which include:
+
+Lowered Acoustic Doppler Current Profiler (LADCP): This instrument measures water velocity throughout the water column, providing detailed insights into the flow patterns of boundary currents.
+Conductivity-Temperature-Depth (CTD): These sensors measure the physical properties of seawater, such as temperature, salinity, and density, which are essential for characterizing oceanographic conditions.
+The calibrated WBTS data, including LADCP and CTD measurements, are made publicly available through NOAA’s Atlantic Oceanographic and Meteorological Laboratory (AOML) (see: https://www.aoml.noaa.gov/western-boundary-time-series/).
  
-We provide an example notebook to demonstrate the purpose of the various function and test datasets from SeaExplorer data in the Baltic and Seaglider data in the Labrador Sea.
+We provide an example notebook to demonstrate how the data is loaded and merged into xarray.Datasets. The data is then saved as netCDF files for each individual year.
 
 ======================================
 
